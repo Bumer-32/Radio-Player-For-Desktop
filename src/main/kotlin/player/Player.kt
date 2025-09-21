@@ -1,22 +1,20 @@
 package ua.pp.lumivoid.player
 
+import javafx.scene.media.Media
+import javafx.scene.media.MediaPlayer
 import org.slf4j.LoggerFactory
 import ua.pp.lumivoid.data.StreamsData
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory
-import uk.co.caprica.vlcj.player.base.MediaPlayer
 
 object Player {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    private val mediaFactory = MediaPlayerFactory()
-    private var mediaPlayer: MediaPlayer? = null
-    private var station: String? = null
+    private var player: MediaPlayer? = null
+    private var streams: StreamsData? = null
     private var volume: Float = 1f
-    private var isHd = false
+//    private var isHd = false
 
     fun setStation(streams: StreamsData) {
-        station = if (isHd) streams.hd["android"]
-        else streams.regular["android"]
+        this.streams = streams
 
         if (!isStopped()) {
             stop()
@@ -24,36 +22,44 @@ object Player {
         }
     }
 
-    fun setHd(hd: Boolean) {
-        isHd = hd
-        if (!isStopped()) {
-            stop()
-            play()
-        }
-    }
+//    fun setHd(hd: Boolean) {
+//        isHd = hd
+//        if (!isStopped()) {
+//            stop()
+//            play()
+//        }
+//    }
 
     fun play() {
-        if (station == null) {
+        if (streams == null) {
             logger.error("Station is null!")
             return
         }
 
-        logger.info("Station: $station")
+        val station = streams!!.hd["android"]
+//        if (isHd) streams!!.hd["android"]
+//        else streams!!.regular["android"]
 
-        mediaPlayer = mediaFactory.mediaPlayers().newMediaPlayer()
-        mediaPlayer!!.media().play(station!!)
+        logger.info("Playing: $station")
+
+        player = MediaPlayer(Media(station!!))
+        player!!.isAutoPlay = true
+
+        player!!.setOnError {
+            logger.error(player!!.error.message)
+            logger.error(player!!.error.type.toString())
+        }
     }
 
     fun stop() {
         logger.info("Stopping player...")
-        mediaPlayer?.controls()!!.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        player?.stop()
+        player = null
     }
 
-    fun isStopped(): Boolean = mediaPlayer == null
+    fun isStopped(): Boolean = player == null
 
-    fun isHd(): Boolean = isHd
+//    fun isHd(): Boolean = isHd
 
     fun setVolume(volume: Float) {
         logger.info("Volume: $volume")

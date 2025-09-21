@@ -24,8 +24,6 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:3.2.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-
-    implementation("uk.co.caprica:vlcj:4.11.0")
 }
 
 kotlin {
@@ -50,7 +48,7 @@ tasks.jar {
 
 javafx {
     version = "21"
-    modules = listOf("javafx.controls")
+    modules = listOf("javafx.controls", "javafx.media")
 }
 
 tasks.compileSass {

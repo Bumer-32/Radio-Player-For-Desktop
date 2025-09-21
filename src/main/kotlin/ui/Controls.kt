@@ -5,7 +5,6 @@ import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.Separator
-import javafx.scene.effect.ColorAdjust
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
@@ -23,29 +22,30 @@ object Controls: VBox() {
         val author = Label("Author").apply { styleClass.addAll("stationText", "author") }
         val text = VBox(station, tag, Separator(), track, author)
 
-        val hdButton = Button().apply {
-            val imageView = ImageView(Image("/icons/hd.png")).apply {
-                fitWidth = 50.0
-                fitHeight = 50.0
-                isPreserveRatio = true
-                effect = ColorAdjust().apply {
-                    brightness = -0.3
-                }
-            }
-            graphic = imageView
+//        val hdButton = Button().apply {
+//            val imageView = ImageView(Image("/icons/hd.png")).apply {
+//                fitWidth = 50.0
+//                fitHeight = 50.0
+//                isPreserveRatio = true
+//                effect = ColorAdjust().apply {
+//                    brightness = -0.3
+//                }
+//            }
+//            graphic = imageView
+//
+//            onAction = EventHandler {
+//                Player.setHd(!Player.isHd())
+//
+//                if (Player.isHd()) {
+//                    imageView.effect = null
+//                } else {
+//                    imageView.effect = ColorAdjust().apply {
+//                        brightness = -0.3
+//                    }
+//                }
+//            }
+//        }
 
-            onAction = EventHandler {
-                Player.setHd(!Player.isHd())
-
-                if (Player.isHd()) {
-                    imageView.effect = null
-                } else {
-                    imageView.effect = ColorAdjust().apply {
-                        brightness = -0.3
-                    }
-                }
-            }
-        }
         val playButton = Button().apply {
             val playImage = Image("/icons/play.png")
             val pauseImage = Image("/icons/pause.png")
@@ -62,7 +62,7 @@ object Controls: VBox() {
                 }
             }
         }
-        val buttons = HBox(hdButton, playButton).apply { alignment = Pos.CENTER_LEFT }
+        val buttons = HBox(playButton).apply { alignment = Pos.CENTER_LEFT }
 
 
         children.addAll(text, buttons)

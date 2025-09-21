@@ -44,12 +44,6 @@ class Main: Application() {
 
         stage.show()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            @Suppress("UnusedExpression")
-            Player // yearly init for quick loading
-        }
-
-
         CoroutineScope(Dispatchers.IO).launch { Stations.parse() }.invokeOnCompletion {
             Platform.runLater {
                 Ui.add(root)
