@@ -1,5 +1,7 @@
 package ua.pp.lumivoid
 
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Scene
@@ -11,9 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import org.slf4j.bridge.SLF4JBridgeHandler
-import ua.pp.lumivoid.player.Player
 import ua.pp.lumivoid.player.Stations
 import ua.pp.lumivoid.ui.Ui
+
 
 fun main() {
     SLF4JBridgeHandler.removeHandlersForRootLogger()
@@ -56,3 +58,5 @@ class Main: Application() {
         launch()
     }
 }
+
+val httpClient = HttpClient(CIO)
