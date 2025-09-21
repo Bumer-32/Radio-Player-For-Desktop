@@ -24,7 +24,7 @@ object StationList: ScrollPane() {
 
         this.content = content
 
-        val stations = Stations.getStations()!!.stations.sortedBy { it.sortingId }
+        val stations = Stations.getStations().stations.sortedBy { it.sortingId }
         stations.forEach { station ->
             if (station.enabled) {
                 val button =
@@ -48,6 +48,10 @@ object StationList: ScrollPane() {
                     }
                 content.children.add(button)
             }
+        }
+
+        onScroll = EventHandler { event ->
+            hvalue += event.deltaY * 0.0002
         }
     }
 }
