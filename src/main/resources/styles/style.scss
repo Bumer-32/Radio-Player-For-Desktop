@@ -1,0 +1,24 @@
+#mainRoot {
+  -fx-background-color: #323336;
+}
+
+.stationText {
+  -fx-text-fill: white;
+
+  &.station {
+    -fx-font-size: 70px;
+  }
+}
+
+.button {
+  -fx-background-color: transparent;
+  -fx-focus-color: transparent;
+}
+
+.stationList {
+  -fx-background-color: transparent;
+
+  > .viewport{
+    -fx-background-color: transparent;
+  }
+}
