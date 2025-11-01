@@ -1,0 +1,39 @@
+﻿using Avalonia;
+using System;
+using System.IO;
+using Serilog;
+
+namespace RadioPlayerForDesktop;
+
+sealed class Program
+{
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        File.Delete(Constants.LogFile);
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File(Constants.LogFile)
+            .CreateLogger();
+        
+        Log.Information("RadioPlayerForDesktop");
+
+        Api.CheckAndPreload().Wait();
+        
+        Audio.LoadConfig();
+        
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+    }
+
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace();
+}
