@@ -2,8 +2,8 @@
 
 on: 
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 jobs:
   release:
@@ -32,14 +32,36 @@ jobs:
         
       - name: Pack to zip
         run: |
-          ZIP_NAME="RadioPlayerForDesktop"
+          ZIP_NAME="RadioPlayerForDesktop-${{ matrix.platform }}"
           if [ "${{ matrix.self-contained }}" = "true" ]; then
             ZIP_NAME="${ZIP_NAME}-portable"
           fi
-          zip -r ./bin/Release/net9.0/${ZIP_NAME}.zip ./bin/Release/net9.0/RadioPlayerForDesktop
-        
-      - name: Upload artifact
+          cd ./bin/Release/net9.0
+          zip -r ${ZIP_NAME}.zip RadioPlayerForDesktop
+          echo "${ZIP_NAME}.zip" >> $GITHUB_WORKSPACE/artifacts.txt
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Radio Player For Desktop Release
-          path: ./bin/Release/net9.0/RadioPlayerForDesktop.zip
+          name: release-zips
+          path: ./bin/Release/net9.0/*.zip
+  
+  publish:
+    name: Create Github Release
+    runs-on: ubuntu-latest
+    needs: release
+    
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-zips
+          path: ./artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Radio Player For Desktop ${{ github.ref_name }}
+          files: ./artifacts/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
