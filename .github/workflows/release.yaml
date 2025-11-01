@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - "v*"
+        
+permissions:
+  contents: write
 
 jobs:
   release:
@@ -56,6 +59,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           path: ./artifacts
+          merge-multiple: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
