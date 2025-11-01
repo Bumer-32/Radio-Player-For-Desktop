@@ -1,5 +1,8 @@
 ﻿using Avalonia;
 using System;
+using System.IO;
+using RadioPlayerForDesktop.Services;
+using Serilog;
 
 namespace RadioPlayerForDesktop;
 
@@ -9,8 +12,22 @@ sealed class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        File.Delete(Constants.LogFile);
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File(Constants.LogFile)
+            .CreateLogger();
+        
+        Log.Information("RadioPlayerForDesktop");
+        
+        Api.CheckAndPreload();
+        
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+    }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
