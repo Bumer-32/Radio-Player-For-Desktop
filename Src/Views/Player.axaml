@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RadioPlayerForDesktop.Views.Player">
+    <UniformGrid HorizontalAlignment="Center" VerticalAlignment="Center" Rows="1" Columns="2" ColumnSpacing="130">
+        <Image Source="avares://RadioPlayerForDesktop/Assets/rp_logo.png" Width="240" Height="240" x:Name="Logo"></Image>
+        
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240">
+            <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="240" Height="106">
+                <Label Canvas.Left="0" Canvas.Top="0" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="StationLabel">Label</Label>
+            </Canvas>
+            
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="240">
+                <Button Background="Transparent" CornerRadius="25" VerticalAlignment="Center" HorizontalAlignment="Left" Click="HdButtonClick">
+                    <Grid>
+                        <Image Source="avares://RadioPlayerForDesktop/Assets/hd.png" Width="70" Height="70" Opacity="0.5" x:Name="Hdbutton" />
+                    </Grid>
+                </Button>
+            
+                <Button Background="Transparent" CornerRadius="50" VerticalAlignment="Center" HorizontalAlignment="Center" Click="PlayButtonClick">
+                    <Image Source="avares://RadioPlayerForDesktop/Assets/play.png" Width="70" Height="70" x:Name="PlayButton" />
+                </Button>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="240">
+                <Image Source="avares://RadioPlayerForDesktop/Assets/volume.png" Width="35" Height="35" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider Minimum="0" Maximum="100" Value="100" Width="200" x:Name="VolumeSlider" VerticalAlignment="Center" HorizontalAlignment="Center" PointerReleased="VolumeSlider_OnPointerReleased" />
+            </StackPanel>
+        </StackPanel>
+    </UniformGrid>
+</UserControl>

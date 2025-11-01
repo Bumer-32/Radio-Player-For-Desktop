@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using System;
 using System.IO;
-using RadioPlayerForDesktop.Services;
 using Serilog;
 
 namespace RadioPlayerForDesktop;
@@ -22,8 +21,10 @@ sealed class Program
             .CreateLogger();
         
         Log.Information("RadioPlayerForDesktop");
+
+        Api.CheckAndPreload().Wait();
         
-        Api.CheckAndPreload();
+        Audio.LoadConfig();
         
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

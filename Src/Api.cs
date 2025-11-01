@@ -6,10 +6,10 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using RadioPlayerForDesktop.Services.Data;
+using RadioPlayerForDesktop.Data;
 using Serilog;
 
-namespace RadioPlayerForDesktop.Services;
+namespace RadioPlayerForDesktop;
 
 public static class Api
 {
@@ -36,13 +36,13 @@ public static class Api
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Fatal(e.ToString());
                 Environment.Exit(1);
             }
         }
         else
         {
-            Console.WriteLine(response.StatusCode);
+            Log.Fatal(response.StatusCode.ToString());
             Environment.Exit(1);
         }
         
@@ -50,22 +50,29 @@ public static class Api
     }
 
     // Downloads radio logos and caches it
-    internal static async void CheckAndPreload()
+    internal static async Task CheckAndPreload()
     {
         Log.Information("Checking cache");
         
-        var config = await Get();
         using var client = new HttpClient();
         Dictionary<int, string> modifiedAt;
         
         if (File.Exists(Constants.ModifiedMapPath))
         {
+            if (DateTime.UtcNow - File.GetLastWriteTimeUtc(Constants.ModifiedMapPath) < TimeSpan.FromHours(24))
+            {
+                Log.Information("Modifications file modified less than 24 hours ago, skip cache checking");
+                return;
+            }
+            
             modifiedAt = JsonSerializer.Deserialize<Dictionary<int, string>>(await File.ReadAllTextAsync(Constants.ModifiedMapPath)) ?? new();
         }
         else
         {
             modifiedAt = new();
         }
+        
+        var config = await Get();
 
         Directory.CreateDirectory(Constants.CachePath);
 
