@@ -31,10 +31,15 @@ jobs:
         run: mv ./bin/Release/net9.0/${{ matrix.platform }} ./bin/Release/RadioPlayerForDesktop
         
       - name: Pack to zip
-        run: zip -r ./bin/Release/net9.0/RadioPlayerForDesktop-${{ matrix.self-contained == 'true' && 'portable' }}.zip ./bin/Release/net9.0/RadioPlayerForDesktop
+        run: |
+          ZIP_NAME="RadioPlayerForDesktop"
+          if [ "${{ matrix.self-contained }}" = "true" ]; then
+            ZIP_NAME="${ZIP_NAME}-portable"
+          fi
+          zip -r ./bin/Release/net9.0/${ZIP_NAME}.zip ./bin/Release/net9.0/RadioPlayerForDesktop
         
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Radio Player For Desktop Release
-          path: ./bin/Release/net9.0/RadioPlayerForDesktop-${{ matrix.self-contained == 'true' && 'portable' }}.zip
+          path: ./bin/Release/net9.0/RadioPlayerForDesktop.zip
