@@ -38,12 +38,12 @@ jobs:
           fi
           cd ./bin/Release/net9.0
           zip -r ${ZIP_NAME}.zip RadioPlayerForDesktop
-          echo "${ZIP_NAME}.zip" >> $GITHUB_WORKSPACE/artifacts.txt
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-zips
+          name: ${{ env.ZIP_NAME }}
           path: ./bin/Release/net9.0/*.zip
   
   publish:
@@ -53,9 +53,8 @@ jobs:
     
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          name: release-zips
           path: ./artifacts
 
       - name: Create GitHub Release
