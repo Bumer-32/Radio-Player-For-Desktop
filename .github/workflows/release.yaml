@@ -28,7 +28,7 @@ jobs:
         run: dotnet publish -c Release -r ${{ matrix.platform }} --self-contained ${{ matrix.self-contained }}
         
       - name: Rename folder
-        run: mv ./bin/Release/net9.0/${{ matrix.platform }} ./bin/Release/RadioPlayerForDesktop
+        run: mv ./bin/Release/net9.0/${{ matrix.platform }} ./bin/Release/net9.0/RadioPlayerForDesktop
         
       - name: Pack to zip
         run: |
